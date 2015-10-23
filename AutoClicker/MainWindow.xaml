@@ -88,10 +88,10 @@
 
                             <ComboBox Grid.Row="1" Grid.Column="5" VerticalAlignment="Center"
                                       SelectedIndex="{Binding SelectedClickMode}">
-                                <ComboBoxItem Tag="0">Нажать и отпустить</ComboBoxItem>
-                                <ComboBoxItem Tag="1">Нажать</ComboBoxItem>
-                                <ComboBoxItem Tag="2">Отпустить</ComboBoxItem>
-                                <ComboBoxItem Tag="2">Переместить</ComboBoxItem>
+                                <ComboBoxItem Tag="0">Press and Release</ComboBoxItem>
+                                <ComboBoxItem Tag="1">Press</ComboBoxItem>
+                                <ComboBoxItem Tag="2">Release</ComboBoxItem>
+                                <ComboBoxItem Tag="2">Move</ComboBoxItem>
                             </ComboBox>
 
                             <Button Grid.Row="1" Grid.Column="6" Margin="6" Content="-" Padding="6,0"
@@ -165,6 +165,7 @@
 
         <Separator Grid.Row="7" Grid.ColumnSpan="2" Grid.Column="0" Margin="6" />
 
+        <Label Grid.Row="8" Grid.Column="0" Margin="6,0" VerticalAlignment="Center" Foreground="Gray">You can always cancel script by pressing Ctrl+Shift+F12</Label>
         <Button Grid.Row="8" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding RunButtonText}" Padding="6"
                 Margin="6"
                 Command="{Binding RunCommand}"

@@ -277,12 +277,16 @@ namespace AutoClicker.ViewModel
                     }
                     finally
                     {
-                        dispatcher.Invoke(() => IsClicking = false);
-                        dispatcher.Invoke(() => IsCancelling = false);
-                        dispatcher.Invoke(() => Countdown = 0);
+                        dispatcher.Invoke(() =>
+                        {
+                            IsClicking = false;
+                            IsCancelling = false;
+                            Countdown = 0;
+                        });
 
                         if(!ct.IsCancellationRequested)
                         {
+                            dispatcher.InvokeAsync(() => RestoreAction?.Invoke());
                             CancellationTokenSource = null;
                         }
                     }
