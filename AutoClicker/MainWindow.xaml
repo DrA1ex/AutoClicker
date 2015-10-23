@@ -1,0 +1,168 @@
+﻿<Window x:Class="AutoClicker.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModel="clr-namespace:AutoClicker.ViewModel"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="AutoClicker by Alex" MinHeight="540" MinWidth="550" MaxHeight="760" MaxWidth="800" Height="550"
+        Width="550"
+        d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel, IsDesignTimeCreatable=True}"
+        WindowStartupLocation="CenterScreen" Closed="OnClosed">
+
+    <Window.InputBindings>
+        <KeyBinding Gesture="Ctrl+Shift+F12" Command="{Binding RunCommand}"
+                    HotkeyManager.RegisterGlobalHotkey="True" />
+    </Window.InputBindings>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <TextBlock FontSize="24" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="8"
+                   FontFamily="Segoe WP Black">
+            Autoclicker by A1ex
+        </TextBlock>
+
+        <Separator Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Margin="6" />
+
+        <Label Grid.Row="2" Grid.Column="0" Content="Points" VerticalAlignment="Bottom" Margin="6" />
+        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+            <Button Margin="6" Padding="6" Content="Add" Command="{Binding AddNewPointCommand}" />
+            <Button Margin="6" HorizontalAlignment="Right" Padding="6" Content="Capture"
+                    Command="{Binding RecordPointsCommand}" />
+        </StackPanel>
+
+        <Separator Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0" Margin="6" />
+
+        <ScrollViewer Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="6"
+                      HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Points}" AlternationCount="{Binding Points.Count}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid HorizontalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="100" />
+                                <ColumnDefinition Width="150" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+
+                            <Separator x:Name="ItemsSeparator" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="7" />
+
+                            <TextBlock Grid.Row="1" Grid.Column="0"
+                                       Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(ItemsControl.AlternationIndex), Converter={StaticResource IncrementConverter}, StringFormat={}{0}.}"
+                                       VerticalAlignment="Center" Margin="6" />
+
+                            <Label Content="X:" VerticalAlignment="Center" Margin="6" Grid.Row="1" Grid.Column="1" />
+                            <xctk:IntegerUpDown Grid.Row="1" Grid.Column="2" Margin="6" Value="{Binding X}"
+                                                TextAlignment="Center"
+                                                VerticalAlignment="Center" Maximum="9999" Minimum="0"
+                                                ParsingNumberStyle="Integer" ShowButtonSpinner="False" />
+                            <Label Grid.Row="1" Grid.Column="3" Content="Y:" VerticalAlignment="Center" Margin="6" />
+                            <xctk:IntegerUpDown Grid.Row="1" Grid.Column="4" Margin="6" Value="{Binding Y}"
+                                                TextAlignment="Center"
+                                                VerticalAlignment="Center" Maximum="9999" Minimum="0"
+                                                ParsingNumberStyle="Integer" ShowButtonSpinner="False" />
+
+                            <ComboBox Grid.Row="1" Grid.Column="5" VerticalAlignment="Center"
+                                      SelectedIndex="{Binding SelectedClickMode}">
+                                <ComboBoxItem Tag="0">Нажать и отпустить</ComboBoxItem>
+                                <ComboBoxItem Tag="1">Нажать</ComboBoxItem>
+                                <ComboBoxItem Tag="2">Отпустить</ComboBoxItem>
+                                <ComboBoxItem Tag="2">Переместить</ComboBoxItem>
+                            </ComboBox>
+
+                            <Button Grid.Row="1" Grid.Column="6" Margin="6" Content="-" Padding="6,0"
+                                    VerticalAlignment="Center"
+                                    Command="{Binding RelativeSource={RelativeSource AncestorType=Window}, Path=DataContext.RemovePointCommand}"
+                                    CommandParameter="{Binding}" />
+                        </Grid>
+
+                        <DataTemplate.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource PreviousData}}"
+                                         Value="{x:Null}">
+                                <Setter TargetName="ItemsSeparator" Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </DataTemplate.Triggers>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <Separator Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="6" />
+
+        <Grid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="6" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="100" />
+            </Grid.ColumnDefinitions>
+
+
+            <Label Content="Repeats:" Margin="6" HorizontalAlignment="Right" />
+            <xctk:IntegerUpDown Grid.Row="0" Grid.Column="1" ShowButtonSpinner="False" Margin="6"
+                                HorizontalAlignment="Stretch" Minimum="0" Maximum="10000" Value="{Binding RepeatCount}" />
+
+
+            <Label Grid.Row="0" Grid.Column="2" Content="Delay after click:" Margin="6" HorizontalAlignment="Right" />
+            <xctk:IntegerUpDown Grid.Row="0" Grid.Column="3" ShowButtonSpinner="False" Margin="6"
+                                HorizontalAlignment="Stretch" Minimum="0" Maximum="10000"
+                                Value="{Binding DelayAfterClick}" Increment="100" />
+
+            <Label Grid.Row="1" Grid.Column="0" Content="Click duration:" Margin="6"
+                   HorizontalAlignment="Right" />
+            <xctk:IntegerUpDown Grid.Row="1" Grid.Column="1" ShowButtonSpinner="False" Margin="6"
+                                HorizontalAlignment="Stretch" Minimum="0" Maximum="10000"
+                                Value="{Binding ClickDuration}" Increment="100" />
+
+            <Label Grid.Row="1" Grid.Column="2" Content="Delay after loop:" Margin="6"
+                   HorizontalAlignment="Right" />
+            <xctk:IntegerUpDown Grid.Row="1" Grid.Column="3" ShowButtonSpinner="False" Margin="6"
+                                HorizontalAlignment="Stretch" Minimum="0" Maximum="10000"
+                                Value="{Binding DelayAfterStory}" Increment="100" />
+
+            <Label Grid.Row="2" Grid.Column="0" Content="Cursor speed:" Margin="6"
+                   HorizontalAlignment="Right" />
+            <xctk:DoubleUpDown Grid.Row="2" Grid.Column="1" ShowButtonSpinner="False" Margin="6"
+                               HorizontalAlignment="Stretch" Minimum="0" Maximum="1"
+                               Value="{Binding Speed}" Increment="0.1" />
+
+        </Grid>
+
+        <Separator Grid.Row="7" Grid.ColumnSpan="2" Grid.Column="0" Margin="6" />
+
+        <Button Grid.Row="8" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding RunButtonText}" Padding="6"
+                Margin="6"
+                Command="{Binding RunCommand}"
+                IsEnabled="{Binding IsCancelling, Converter={StaticResource BoolInverter}}" />
+    </Grid>
+</Window>

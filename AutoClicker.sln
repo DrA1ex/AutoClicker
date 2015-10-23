@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoClicker", "AutoClicker\AutoClicker.csproj", "{2F0815B6-1D02-4A1B-B14D-E11DF8E36C38}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoClicker.Common", "AutoClicker.Common\AutoClicker.Common.csproj", "{8C354624-99B5-4D4A-9D30-4EC4459D9159}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gma.UserActivityMonitor", "Gma.UserActivityMonitor\Gma.UserActivityMonitor.csproj", "{F52AA97E-180A-40ED-8F2B-09080171D6C7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2F0815B6-1D02-4A1B-B14D-E11DF8E36C38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F0815B6-1D02-4A1B-B14D-E11DF8E36C38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F0815B6-1D02-4A1B-B14D-E11DF8E36C38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F0815B6-1D02-4A1B-B14D-E11DF8E36C38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C354624-99B5-4D4A-9D30-4EC4459D9159}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C354624-99B5-4D4A-9D30-4EC4459D9159}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C354624-99B5-4D4A-9D30-4EC4459D9159}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C354624-99B5-4D4A-9D30-4EC4459D9159}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F52AA97E-180A-40ED-8F2B-09080171D6C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F52AA97E-180A-40ED-8F2B-09080171D6C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F52AA97E-180A-40ED-8F2B-09080171D6C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F52AA97E-180A-40ED-8F2B-09080171D6C7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
