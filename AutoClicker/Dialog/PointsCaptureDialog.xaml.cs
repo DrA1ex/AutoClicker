@@ -39,7 +39,7 @@ namespace AutoClicker.Dialog
             AllowInteractions = allowInteractions;
             DataContext = this;
 
-            //Topmost = true;
+            Topmost = true;
 
             Left = 0;
             Top = 0;
@@ -49,9 +49,9 @@ namespace AutoClicker.Dialog
 
             if(AllowInteractions)
             {
-                HookManager.MouseUp += HookManagerOnMouseDown;
+                HookManager.MouseUp += HookManagerOnMouseUp;
                 HookManager.MouseMove += HookManagerOnMouseMove;
-                HookManager.MouseDown += HookManagerOnMouseUp;
+                HookManager.MouseDown += HookManagerOnMouseDown;
             }
             else
             {
