@@ -1,11 +1,8 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)"
-              GeneratedClassNamespace="AutoClicker.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="AutoClicker.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="Points" Type="System.Collections.Generic.List&lt;AutoClicker.Common.Model.ClickPoint&gt;"
-             Scope="User">
+    <Setting Name="Points" Type="System.Collections.Generic.List&lt;AutoClicker.Common.Model.ClickPoint&gt;" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="DelayAfterClick" Type="System.Int32" Scope="User">
@@ -22,6 +19,9 @@
     </Setting>
     <Setting Name="ClickDuration" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
+    </Setting>
+    <Setting Name="AllowInteractions" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>
 </SettingsFile>

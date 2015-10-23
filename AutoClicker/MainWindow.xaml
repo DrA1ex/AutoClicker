@@ -130,32 +130,37 @@
 
             <Label Content="Repeats:" Margin="6" HorizontalAlignment="Right" />
             <xctk:IntegerUpDown Grid.Row="0" Grid.Column="1" ShowButtonSpinner="False" Margin="6"
-                                HorizontalAlignment="Stretch" Minimum="0" Maximum="10000" Value="{Binding RepeatCount}" />
+                                HorizontalAlignment="Stretch" Minimum="0" Maximum="10000" Value="{Binding RepeatCount}" TextAlignment="Left" />
 
 
             <Label Grid.Row="0" Grid.Column="2" Content="Delay after click:" Margin="6" HorizontalAlignment="Right" />
             <xctk:IntegerUpDown Grid.Row="0" Grid.Column="3" ShowButtonSpinner="False" Margin="6"
                                 HorizontalAlignment="Stretch" Minimum="0" Maximum="10000"
-                                Value="{Binding DelayAfterClick}" Increment="100" />
+                                Value="{Binding DelayAfterClick}" Increment="100" TextAlignment="Left" />
 
             <Label Grid.Row="1" Grid.Column="0" Content="Click duration:" Margin="6"
                    HorizontalAlignment="Right" />
             <xctk:IntegerUpDown Grid.Row="1" Grid.Column="1" ShowButtonSpinner="False" Margin="6"
                                 HorizontalAlignment="Stretch" Minimum="0" Maximum="10000"
-                                Value="{Binding ClickDuration}" Increment="100" />
+                                Value="{Binding ClickDuration}" Increment="100" TextAlignment="Left" />
 
             <Label Grid.Row="1" Grid.Column="2" Content="Delay after loop:" Margin="6"
                    HorizontalAlignment="Right" />
             <xctk:IntegerUpDown Grid.Row="1" Grid.Column="3" ShowButtonSpinner="False" Margin="6"
                                 HorizontalAlignment="Stretch" Minimum="0" Maximum="10000"
-                                Value="{Binding DelayAfterStory}" Increment="100" />
+                                Value="{Binding DelayAfterStory}" Increment="100" TextAlignment="Left" />
 
             <Label Grid.Row="2" Grid.Column="0" Content="Cursor speed:" Margin="6"
                    HorizontalAlignment="Right" />
-            <xctk:DoubleUpDown Grid.Row="2" Grid.Column="1" ShowButtonSpinner="False" Margin="6"
+            <xctk:DoubleUpDown Grid.Row="2" Grid.Column="1" Margin="6"
                                HorizontalAlignment="Stretch" Minimum="0" Maximum="1"
-                               Value="{Binding Speed}" Increment="0.1" />
+                               Value="{Binding Speed}" Increment="0.1" ShowButtonSpinner="False" TextAlignment="Left" />
 
+            <Label Grid.Row="2" Grid.Column="2" Content="Allow ineraction:" Margin="6"
+                   HorizontalAlignment="Right" />
+
+            <CheckBox Grid.Row="2" Grid.Column="3" Margin="6"
+                   HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding AllowInteractions}" />
         </Grid>
 
         <Separator Grid.Row="7" Grid.ColumnSpan="2" Grid.Column="0" Margin="6" />

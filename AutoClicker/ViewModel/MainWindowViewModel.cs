@@ -158,6 +158,9 @@ namespace AutoClicker.ViewModel
         public CancellationTokenSource CancellationTokenSource { get; set; }
         public Action MinimizeAction { get; set; }
         public Action RestoreAction { get; set; }
+
+        public bool AllowInteractions { get; set; } = true;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void AddNewPoint()
@@ -172,7 +175,7 @@ namespace AutoClicker.ViewModel
 
         private void RecordPoints()
         {
-            var dlg = new PointsCaptureDialog();
+            var dlg = new PointsCaptureDialog(AllowInteractions);
             MinimizeAction?.Invoke();
 
             dlg.ShowDialog();

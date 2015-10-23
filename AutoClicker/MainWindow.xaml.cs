@@ -37,6 +37,7 @@ namespace AutoClicker
             ViewModel.RepeatCount = Settings.Default.RepeatCount;
             ViewModel.Speed = Settings.Default.Speed;
             ViewModel.ClickDuration = Settings.Default.ClickDuration;
+            ViewModel.AllowInteractions = Settings.Default.AllowInteractions;
         }
 
         public MainWindowViewModel ViewModel => _viewModel ?? (_viewModel = new MainWindowViewModel());
@@ -49,6 +50,7 @@ namespace AutoClicker
             Settings.Default.RepeatCount = ViewModel.RepeatCount;
             Settings.Default.Speed = ViewModel.Speed;
             Settings.Default.ClickDuration = ViewModel.ClickDuration;
+            Settings.Default.AllowInteractions = ViewModel.AllowInteractions;
 
             Settings.Default.Save();
         }

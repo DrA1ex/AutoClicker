@@ -10,7 +10,7 @@ using AutoClicker.Common.Model;
 using AutoClicker.Common.Utils;
 using Gma.UserActivityMonitor;
 using HorizontalAlignment = System.Windows.HorizontalAlignment;
-using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
+using HookMouseEventArgs = System.Windows.Forms.MouseEventArgs;
 
 namespace AutoClicker.Dialog
 {
@@ -18,39 +18,63 @@ namespace AutoClicker.Dialog
     {
         private ICommand _exitCommand;
         private List<ClickPoint> _points;
+        private bool AllowInteractions { get; }
 
-        public PointsCaptureDialog()
+        public PointsCaptureDialog(bool allowInteractions = true)
         {
             InitializeComponent();
 
+            AllowInteractions = allowInteractions;
             DataContext = this;
+
+            Topmost = true;
 
             Left = 0;
             Top = 0;
 
             Width = SystemParameters.PrimaryScreenWidth;
             Height = SystemParameters.PrimaryScreenHeight;
-#if !DEBUG
-            Topmost = true;
-#endif
 
-            HookManager.MouseUp += HookManagerOnMouseClick;
+            if(AllowInteractions)
+            {
+                HookManager.MouseUp += HookManagerOnMouseClick;
+            }
+            else
+            {
+                MouseUp += OnMouseUp;
+            }
         }
 
         private List<ClickPoint> Points => _points ?? (_points = new List<ClickPoint>());
+
         public ICommand ExitCommand => _exitCommand ?? (_exitCommand = new DelegateCommand(Exit));
 
-        private void HookManagerOnMouseClick(object sender, MouseEventArgs e)
+        private void HookManagerOnMouseClick(object sender, HookMouseEventArgs e)
         {
             if(e.Button.HasFlag(MouseButtons.Left))
             {
-                var point = new ClickPoint {X = e.X, Y = e.Y};
-                Dispatcher.InvokeAsync(() =>
-                {
-                    Points.Add(point);
-                    AddCircleAtPosition(Points.Count, point);
-                });
+                MouseClicked(e.X, e.Y);
             }
+        }
+
+        private void OnMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if(e.ChangedButton == MouseButton.Left)
+            {
+                var pos = e.GetPosition(this);
+                MouseClicked((int)pos.X, (int)pos.Y);
+            }
+        }
+
+        private void MouseClicked(int x, int y)
+        {
+            var point = new ClickPoint { X = x, Y = y };
+
+            Dispatcher.InvokeAsync(() =>
+            {
+                Points.Add(point);
+                AddCircleAtPosition(Points.Count, point);
+            });
         }
 
         public ClickPoint[] GetPoints()
@@ -90,13 +114,24 @@ namespace AutoClicker.Dialog
         protected override void OnSourceInitialized(EventArgs e)
         {
             base.OnSourceInitialized(e);
-            var hwnd = new WindowInteropHelper(this).Handle;
-            WindowsServices.SetWindowExTransparent(hwnd);
+            if(AllowInteractions)
+            {
+                var hwnd = new WindowInteropHelper(this).Handle;
+                WindowsServices.SetWindowExTransparent(hwnd);
+            }
         }
 
         private void Exit()
         {
-            HookManager.MouseUp -= HookManagerOnMouseClick;
+            if(AllowInteractions)
+            {
+                HookManager.MouseUp -= HookManagerOnMouseClick;
+            }
+            else
+            {
+                MouseUp -= OnMouseUp;
+            }
+
             Close();
         }
     }
