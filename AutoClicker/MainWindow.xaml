@@ -165,7 +165,7 @@
 
         <Separator Grid.Row="7" Grid.ColumnSpan="2" Grid.Column="0" Margin="6" />
 
-        <Label Grid.Row="8" Grid.Column="0" Margin="6,0" VerticalAlignment="Center" Foreground="Gray">You can always cancel script by pressing Ctrl+Shift+F12</Label>
+        <Label Grid.Row="8" Grid.Column="0" Margin="6,0" VerticalAlignment="Center" Foreground="Gray">You can always start or stop script by pressing Ctrl+Shift+F12</Label>
         <Button Grid.Row="8" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding RunButtonText}" Padding="6"
                 Margin="6"
                 Command="{Binding RunCommand}"
