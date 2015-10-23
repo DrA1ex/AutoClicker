@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using static System.Math;
 
 namespace AutoClicker.Common.Model
 {
@@ -56,11 +57,11 @@ namespace AutoClicker.Common.Model
         public object Clone()
         {
             return new ClickPoint
-                   {
-                       X = X,
-                       Y = Y,
-                       SelectedClickMode = SelectedClickMode
-                   };
+            {
+                X = X,
+                Y = Y,
+                SelectedClickMode = SelectedClickMode
+            };
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -69,6 +70,19 @@ namespace AutoClicker.Common.Model
         {
             var handler = PropertyChanged;
             handler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public double Distance(ClickPoint toPoint)
+        {
+            return Sqrt(Pow(X - toPoint.X, 2) + Pow(Y - toPoint.Y, 2));
+        }
+
+        public double Angle(int x, int y)
+        {
+            double deltaX = x - X;
+            double deltaY = y - Y;
+
+            return Atan2(deltaX, deltaY);
         }
     }
 }

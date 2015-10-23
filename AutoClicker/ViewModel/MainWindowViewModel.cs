@@ -18,6 +18,7 @@ namespace AutoClicker.ViewModel
     public class MainWindowViewModel : INotifyPropertyChanged
     {
         private ICommand _addNewPointCommand;
+        private bool _allowInteractions = true;
         private int _clickDuration;
         private int _countdown;
         private int _delayAfterClick;
@@ -110,6 +111,16 @@ namespace AutoClicker.ViewModel
             }
         }
 
+        public bool AllowInteractions
+        {
+            get { return _allowInteractions; }
+            set
+            {
+                _allowInteractions = value;
+                OnPropertyChanged(nameof(AllowInteractions));
+            }
+        }
+
         public bool IsClicking
         {
             get { return _isClicking; }
@@ -156,10 +167,10 @@ namespace AutoClicker.ViewModel
         }
 
         public CancellationTokenSource CancellationTokenSource { get; set; }
-        public Action MinimizeAction { get; set; }
-        public Action RestoreAction { get; set; }
 
-        public bool AllowInteractions { get; set; } = true;
+        public Action MinimizeAction { get; set; }
+
+        public Action RestoreAction { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
