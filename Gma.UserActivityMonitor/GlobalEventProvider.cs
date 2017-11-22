@@ -13,10 +13,7 @@ namespace Gma.UserActivityMonitor
         /// <summary>
         ///     This component raises events. The value is always true.
         /// </summary>
-        protected override bool CanRaiseEvents
-        {
-            get { return true; }
-        }
+        protected override bool CanRaiseEvents => true;
 
         //################################################################
 

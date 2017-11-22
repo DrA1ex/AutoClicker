@@ -26,7 +26,7 @@ namespace AutoClicker.Common.Model
 
         public int X
         {
-            get { return _x; }
+            get => _x;
             set
             {
                 _x = value;
@@ -36,7 +36,7 @@ namespace AutoClicker.Common.Model
 
         public int Y
         {
-            get { return _y; }
+            get => _y;
             set
             {
                 _y = value;
@@ -46,7 +46,7 @@ namespace AutoClicker.Common.Model
 
         public int SelectedClickMode
         {
-            get { return _selectedClickMode; }
+            get => _selectedClickMode;
             set
             {
                 _selectedClickMode = value;

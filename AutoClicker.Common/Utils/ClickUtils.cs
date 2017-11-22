@@ -36,8 +36,7 @@ namespace AutoClicker.Common.Utils
 
         private static void MoveTo(int x, int y, double speed)
         {
-            Point point;
-            GetCursorPos(out point);
+            GetCursorPos(out var point);
 
             var curX = (int)((point.X * 65535) / SystemParameters.PrimaryScreenWidth);
             var curY = (int)((point.Y * 65535) / SystemParameters.PrimaryScreenHeight);

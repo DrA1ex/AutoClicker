@@ -6,7 +6,7 @@
         xmlns:viewModel="clr-namespace:AutoClicker.ViewModel"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="AutoClicker by Alex" MinHeight="540" MinWidth="550" MaxHeight="760" MaxWidth="800" Height="550"
+        Title="AutoClicker @alexnizze" MinHeight="540" MinWidth="550" MaxHeight="760" MaxWidth="800" Height="550"
         Width="550"
         d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel, IsDesignTimeCreatable=True}"
         WindowStartupLocation="CenterScreen" Closed="OnClosed">
@@ -20,8 +20,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -32,23 +30,17 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <TextBlock FontSize="24" HorizontalAlignment="Center" Grid.ColumnSpan="2" Margin="8"
-                   FontFamily="Segoe WP Black">
-            Autoclicker by A1ex
-        </TextBlock>
 
-        <Separator Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Margin="6" />
-
-        <Label Grid.Row="2" Grid.Column="0" Content="Points" VerticalAlignment="Bottom" Margin="6" />
-        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+        <Label Grid.Row="0" Grid.Column="0" Content="Points" VerticalAlignment="Bottom" Margin="6" />
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
             <Button Margin="6" Padding="6" Content="Add" Command="{Binding AddNewPointCommand}" />
             <Button Margin="6" HorizontalAlignment="Right" Padding="6" Content="Capture"
                     Command="{Binding RecordPointsCommand}" />
         </StackPanel>
 
-        <Separator Grid.Row="3" Grid.ColumnSpan="2" Grid.Column="0" Margin="6" />
+        <Separator Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" Margin="6" />
 
-        <ScrollViewer Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="6"
+        <ScrollViewer Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="6"
                       HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding Points}" AlternationCount="{Binding Points.Count}">
                 <ItemsControl.ItemTemplate>
@@ -111,9 +103,9 @@
             </ItemsControl>
         </ScrollViewer>
 
-        <Separator Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="6" />
+        <Separator Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="6" />
 
-        <Grid Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Margin="6" HorizontalAlignment="Center">
+        <Grid Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="6" HorizontalAlignment="Center">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition />
@@ -163,10 +155,10 @@
                    HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="{Binding AllowInteractions}" />
         </Grid>
 
-        <Separator Grid.Row="7" Grid.ColumnSpan="2" Grid.Column="0" Margin="6" />
+        <Separator Grid.Row="5" Grid.ColumnSpan="2" Grid.Column="0" Margin="6" />
 
-        <Label Grid.Row="8" Grid.Column="0" Margin="6,0" VerticalAlignment="Center" Foreground="Gray">You can always start or stop script by pressing Ctrl+Shift+F12</Label>
-        <Button Grid.Row="8" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding RunButtonText}" Padding="6"
+        <Label Grid.Row="6" Grid.Column="0" Margin="6,0" VerticalAlignment="Center" Foreground="Gray">You can always start or stop script by pressing Ctrl+Shift+F12</Label>
+        <Button Grid.Row="6" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding RunButtonText}" Padding="6"
                 Margin="6"
                 Command="{Binding RunCommand}"
                 IsEnabled="{Binding IsCancelling, Converter={StaticResource BoolInverter}}" />

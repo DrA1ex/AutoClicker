@@ -15,7 +15,7 @@ namespace AutoClicker
             InitializeComponent();
 
             ViewModel.MinimizeAction = Hide;
-            ViewModel.RestoreAction = () =>
+            ViewModel.SequenceFinishedAction = () =>
             {
                 Show();
                 Activate();

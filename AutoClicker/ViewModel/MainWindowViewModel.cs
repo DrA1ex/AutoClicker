@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -41,7 +40,7 @@ namespace AutoClicker.ViewModel
 
         public int RepeatCount
         {
-            get { return _repeatCount; }
+            get => _repeatCount;
             set
             {
                 _repeatCount = value;
@@ -51,7 +50,7 @@ namespace AutoClicker.ViewModel
 
         public int DelayAfterClick
         {
-            get { return _delayAfterClick; }
+            get => _delayAfterClick;
             set
             {
                 _delayAfterClick = value;
@@ -61,7 +60,7 @@ namespace AutoClicker.ViewModel
 
         public bool IsCancelling
         {
-            get { return _isCancelling; }
+            get => _isCancelling;
             set
             {
                 _isCancelling = value;
@@ -72,7 +71,7 @@ namespace AutoClicker.ViewModel
 
         public int Countdown
         {
-            get { return _countdown; }
+            get => _countdown;
             set
             {
                 _countdown = value;
@@ -83,7 +82,7 @@ namespace AutoClicker.ViewModel
 
         public int DelayAfterStory
         {
-            get { return _delayAfterStory; }
+            get => _delayAfterStory;
             set
             {
                 _delayAfterStory = value;
@@ -93,7 +92,7 @@ namespace AutoClicker.ViewModel
 
         public int ClickDuration
         {
-            get { return _clickDuration; }
+            get => _clickDuration;
             set
             {
                 _clickDuration = value;
@@ -103,7 +102,7 @@ namespace AutoClicker.ViewModel
 
         public double Speed
         {
-            get { return _speed; }
+            get => _speed;
             set
             {
                 _speed = value;
@@ -113,7 +112,7 @@ namespace AutoClicker.ViewModel
 
         public bool AllowInteractions
         {
-            get { return _allowInteractions; }
+            get => _allowInteractions;
             set
             {
                 _allowInteractions = value;
@@ -123,7 +122,7 @@ namespace AutoClicker.ViewModel
 
         public bool IsClicking
         {
-            get { return _isClicking; }
+            get => _isClicking;
             set
             {
                 _isClicking = value;
@@ -160,17 +159,14 @@ namespace AutoClicker.ViewModel
 
         public ICommand RunCommand
         {
-            get
-            {
-                return _runCommand ?? (_runCommand = new DelegateCommand(Run, () => Points.Count > 0 || IsClicking));
-            }
+            get { return _runCommand ?? (_runCommand = new DelegateCommand(Run, () => Points.Count > 0 || IsClicking)); }
         }
 
         public CancellationTokenSource CancellationTokenSource { get; set; }
 
         public Action MinimizeAction { get; set; }
 
-        public Action RestoreAction { get; set; }
+        public Action SequenceFinishedAction { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -191,7 +187,7 @@ namespace AutoClicker.ViewModel
 
             dlg.ShowDialog();
 
-            RestoreAction?.Invoke();
+            SequenceFinishedAction?.Invoke();
 
             var points = dlg.GetPoints();
             if(points != null && points.Length > 0)
@@ -204,7 +200,7 @@ namespace AutoClicker.ViewModel
             }
         }
 
-        private void Run()
+        private async void Run()
         {
             if(IsCancelling)
             {
@@ -221,77 +217,72 @@ namespace AutoClicker.ViewModel
             {
                 CancellationTokenSource = new CancellationTokenSource();
 
-                var copyOfPoints = new List<ClickPoint>(Points.Count);
-                copyOfPoints.AddRange(Points.Select(clickPoint => (ClickPoint)clickPoint.Clone()));
+                var copyOfPoints = Points.Select(clickPoint => (ClickPoint)clickPoint.Clone()).ToArray();
                 var dispatcher = Dispatcher.CurrentDispatcher;
                 var ct = CancellationTokenSource.Token;
 
                 var delayAfterClick = DelayAfterClick;
                 var delayAfterStory = DelayAfterStory;
-                var maxClicks = RepeatCount;
+                var repeatCount = RepeatCount > 0 ? RepeatCount : int.MaxValue;
                 var speed = Speed;
                 var clickDuration = ClickDuration;
 
-                Task.Run(() =>
-                {
-                    dispatcher.Invoke(() => IsClicking = true);
+                IsClicking = true;
 
-                    var countdown = 3;
-                    while(!ct.IsCancellationRequested && countdown > 0)
+                try
+                {
+                    for(var countdown = 3; countdown > 0; --countdown)
                     {
                         // ReSharper disable once AccessToModifiedClosure
-                        dispatcher.Invoke(() => Countdown = countdown);
-                        --countdown;
-                        Thread.Sleep(1000);
+                        await dispatcher.InvokeAsync(() => Countdown = countdown, DispatcherPriority.Render, ct);
+                        await Task.Delay(1000, ct);
                     }
 
-                    dispatcher.Invoke(() => Countdown = 0);
+                    await dispatcher.InvokeAsync(() => Countdown = 0, DispatcherPriority.Render, ct);
 
-                    try
+                    for(var clicks = 0; !ct.IsCancellationRequested && clicks < repeatCount; ++clicks)
                     {
-                        var clicks = 0;
-                        while(!ct.IsCancellationRequested && (clicks < maxClicks || maxClicks == 0))
+                        for(var index = 0; !ct.IsCancellationRequested && index < copyOfPoints.Length; ++index)
                         {
-                            foreach(var point in copyOfPoints)
+                            var point = copyOfPoints[index];
+
+                            ClickUtils.Click(point.X, point.Y, (ClickMode)point.SelectedClickMode, speed,
+                                clickDuration);
+
+                            if(DelayAfterClick > 0)
                             {
-                                if(ct.IsCancellationRequested)
-                                {
-                                    break;
-                                }
-
-                                ClickUtils.Click(point.X, point.Y, (ClickMode)point.SelectedClickMode, speed,
-                                    clickDuration);
-
-                                if(!ct.IsCancellationRequested && DelayAfterClick > 0)
-                                {
-                                    Thread.Sleep(delayAfterClick);
-                                }
+                                await Task.Delay(delayAfterClick, ct);
                             }
+                        }
 
-                            if(!ct.IsCancellationRequested && DelayAfterStory > 0)
-                            {
-                                Thread.Sleep(delayAfterStory);
-                            }
-                            ++clicks;
+                        if(DelayAfterStory > 0)
+                        {
+                            await Task.Delay(delayAfterStory, ct);
                         }
                     }
-                    finally
-                    {
-                        dispatcher.Invoke(() =>
-                        {
-                            IsClicking = false;
-                            IsCancelling = false;
-                            Countdown = 0;
-                        });
+                }
+                catch(OperationCanceledException)
+                {
+                    //ignore
+                }
+                finally
+                {
+                    await dispatcher.InvokeAsync(Reset);
 
-                        if(!ct.IsCancellationRequested)
-                        {
-                            dispatcher.InvokeAsync(() => RestoreAction?.Invoke());
-                            CancellationTokenSource = null;
-                        }
+                    if(!ct.IsCancellationRequested)
+                    {
+                        await dispatcher.InvokeAsync(() => SequenceFinishedAction?.Invoke());
+                        CancellationTokenSource = null;
                     }
-                }, ct);
+                }
             }
+        }
+
+        private void Reset()
+        {
+            IsClicking = false;
+            IsCancelling = false;
+            Countdown = 0;
         }
 
         [NotifyPropertyChangedInvocator]

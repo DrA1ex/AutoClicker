@@ -12,7 +12,7 @@ namespace AutoClicker
 
         private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs arg)
         {
-            MessageBox.Show(arg.Exception.ToString(), "Произошла ошибка");
+            MessageBox.Show(arg.Exception.ToString(), "Something bad was happened");
             arg.Handled = true;
         }
     }
