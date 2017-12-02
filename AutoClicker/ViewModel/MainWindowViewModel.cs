@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using AutoClicker.Annotations;
@@ -22,7 +23,7 @@ namespace AutoClicker.ViewModel
         private int _countdown;
         private int _delayAfterClick;
         private int _delayAfterStory;
-        private bool _isCancelling;
+        private bool _isCanceling;
         private bool _isClicking;
         private ObservableCollection<ClickPoint> _points;
         private ICommand _recordPointsCommand;
@@ -30,6 +31,7 @@ namespace AutoClicker.ViewModel
         private int _repeatCount;
         private ICommand _runCommand;
         private double _speed = 0.6;
+        public DpiScale Scale { get; set; }
 
         public MainWindowViewModel()
         {
@@ -58,12 +60,12 @@ namespace AutoClicker.ViewModel
             }
         }
 
-        public bool IsCancelling
+        public bool IsCanceling
         {
-            get => _isCancelling;
+            get => _isCanceling;
             set
             {
-                _isCancelling = value;
+                _isCanceling = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(RunButtonText));
             }
@@ -135,7 +137,7 @@ namespace AutoClicker.ViewModel
         {
             get
             {
-                if(!IsCancelling)
+                if(!IsCanceling)
                 {
                     if(Countdown > 0)
                     {
@@ -159,7 +161,7 @@ namespace AutoClicker.ViewModel
 
         public ICommand RunCommand
         {
-            get { return _runCommand ?? (_runCommand = new DelegateCommand(Run, () => Points.Count > 0 || IsClicking)); }
+            get { return _runCommand ?? (_runCommand = new DelegateCommand(Run, () => (Points.Count > 0 || IsClicking) && !IsCanceling)); }
         }
 
         public CancellationTokenSource CancellationTokenSource { get; set; }
@@ -202,7 +204,7 @@ namespace AutoClicker.ViewModel
 
         private async void Run()
         {
-            if(IsCancelling)
+            if(IsCanceling)
             {
                 return;
             }
@@ -211,9 +213,9 @@ namespace AutoClicker.ViewModel
             {
                 CancellationTokenSource.Cancel();
                 CancellationTokenSource = null;
-                IsCancelling = true;
+                await Dispatcher.CurrentDispatcher.InvokeAsync(() => IsCanceling = true);
             }
-            else if(!IsCancelling && !IsClicking)
+            else if(!IsCanceling && !IsClicking)
             {
                 CancellationTokenSource = new CancellationTokenSource();
 
@@ -245,9 +247,7 @@ namespace AutoClicker.ViewModel
                         for(var index = 0; !ct.IsCancellationRequested && index < copyOfPoints.Length; ++index)
                         {
                             var point = copyOfPoints[index];
-
-                            ClickUtils.Click(point.X, point.Y, (ClickMode)point.SelectedClickMode, speed,
-                                clickDuration);
+                            await Task.Run(() => ClickUtils.Click(point.X, point.Y, (ClickMode)point.SelectedClickMode, speed, clickDuration, Scale.DpiScaleX, Scale.DpiScaleY), ct);
 
                             if(DelayAfterClick > 0)
                             {
@@ -281,7 +281,7 @@ namespace AutoClicker.ViewModel
         private void Reset()
         {
             IsClicking = false;
-            IsCancelling = false;
+            IsCanceling = false;
             Countdown = 0;
         }
 

@@ -14,11 +14,11 @@ namespace AutoClicker.Common.Utils
         [DllImport("user32.dll")]
         private static extern bool GetCursorPos(out Point pt);
 
-        public static void Click(int x, int y, ClickMode mode, double speed, int clickDuration)
+        public static void Click(int x, int y, ClickMode mode, double speed, int clickDuration, double scaleX, double scaleY)
         {
-            x = (int)((x * 65535) / SystemParameters.PrimaryScreenWidth);
-            y = (int)((y * 65535) / SystemParameters.PrimaryScreenHeight);
-            MoveTo(x, y, speed);
+            x = (int)(x * 65535 / SystemParameters.PrimaryScreenWidth);
+            y = (int)(y * 65535 / SystemParameters.PrimaryScreenHeight);
+            MoveTo(x, y, speed, scaleX, scaleY);
 
             if(mode == ClickMode.PushAndRelease || mode == ClickMode.Push)
             {
@@ -34,12 +34,12 @@ namespace AutoClicker.Common.Utils
             }
         }
 
-        private static void MoveTo(int x, int y, double speed)
+        private static void MoveTo(int x, int y, double speed, double scaleX, double scaleY)
         {
             GetCursorPos(out var point);
 
-            var curX = (int)((point.X * 65535) / SystemParameters.PrimaryScreenWidth);
-            var curY = (int)((point.Y * 65535) / SystemParameters.PrimaryScreenHeight);
+            var curX = (int)(point.X / scaleX * 65535 / SystemParameters.PrimaryScreenWidth);
+            var curY = (int)(point.Y / scaleY * 65535 / SystemParameters.PrimaryScreenHeight);
 
             var steps = (int)(Math.Max(Math.Abs(x - curX), Math.Abs(y - curY)) / (3000 * speed));
             if(steps == 0)

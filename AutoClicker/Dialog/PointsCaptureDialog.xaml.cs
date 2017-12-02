@@ -59,8 +59,7 @@ namespace AutoClicker.Dialog
             Width = SystemParameters.PrimaryScreenWidth;
             Height = SystemParameters.PrimaryScreenHeight;
 
-            var dpi = VisualTreeHelper.GetDpi(this);
-            Canvas.RenderTransform = new ScaleTransform(1 / dpi.DpiScaleX, 1 / dpi.DpiScaleY);
+            Dpi = VisualTreeHelper.GetDpi(this);
 
             if(AllowInteractions)
             {
@@ -83,6 +82,8 @@ namespace AutoClicker.Dialog
         private CaptureMode CurrentMode { get; set; } = CaptureMode.None;
 
         private bool AllowInteractions { get; }
+
+        private DpiScale Dpi { get; }
 
         private ClickPoint StartPoint { get; set; }
 
@@ -134,6 +135,12 @@ namespace AutoClicker.Dialog
             Close();
         }
 
+        private void StoreLastMousePosition(double x, double y)
+        {
+            _lastMousePoint.X = x;
+            _lastMousePoint.Y = y;
+        }
+
 
         #region Keyboard event handlers
 
@@ -177,18 +184,17 @@ namespace AutoClicker.Dialog
         {
             if(CurrentMode == CaptureMode.None && e.Button.HasFlag(MouseButtons.Left))
             {
-                Dispatcher.InvokeAsync(() => HandleStartRecording(e.X, e.Y, CaptureMode.Mouse));
+                Dispatcher.InvokeAsync(() => HandleStartRecording((int)_lastMousePoint.X, (int)_lastMousePoint.Y, CaptureMode.Mouse));
             }
         }
 
         private void HookManagerOnMouseMove(object sender, HookMouseEventArgs e)
         {
-            _lastMousePoint.X = e.X;
-            _lastMousePoint.Y = e.Y;
+            StoreLastMousePosition(e.X / Dpi.DpiScaleX, e.Y / Dpi.DpiScaleY);
 
             if(StartPoint != null)
             {
-                Dispatcher.InvokeAsync(() => HandleTargetMove(e.X, e.Y));
+                Dispatcher.InvokeAsync(() => HandleTargetMove((int)_lastMousePoint.X, (int)_lastMousePoint.Y));
             }
         }
 
@@ -196,7 +202,7 @@ namespace AutoClicker.Dialog
         {
             if(CurrentMode == CaptureMode.Mouse && e.Button.HasFlag(MouseButtons.Left))
             {
-                Dispatcher.InvokeAsync(() => HandleStopRecording(e.X, e.Y));
+                Dispatcher.InvokeAsync(() => HandleStopRecording((int)_lastMousePoint.X, (int)_lastMousePoint.Y));
             }
         }
 
@@ -205,16 +211,18 @@ namespace AutoClicker.Dialog
             if(e.ChangedButton == MouseButton.Left)
             {
                 var pos = e.GetPosition(this);
-                HandleStartRecording((int)pos.X, (int)pos.Y, CaptureMode.Mouse);
+                HandleStartRecording((int)_lastMousePoint.X, (int)_lastMousePoint.Y, CaptureMode.Mouse);
             }
         }
 
         private void OnMouseMove(object sender, MouseEventArgs e)
         {
+            var pos = e.GetPosition(this);
+            StoreLastMousePosition(pos.X, pos.Y);
+
             if(StartPoint != null)
             {
-                var pos = e.GetPosition(this);
-                HandleTargetMove((int)pos.X, (int)pos.Y);
+                HandleTargetMove((int)_lastMousePoint.X, (int)_lastMousePoint.Y);
             }
         }
 
@@ -223,7 +231,7 @@ namespace AutoClicker.Dialog
             if(e.ChangedButton == MouseButton.Left)
             {
                 var pos = e.GetPosition(this);
-                HandleStopRecording((int)pos.X, (int)pos.Y);
+                HandleStopRecording((int)_lastMousePoint.X, (int)_lastMousePoint.Y);
             }
         }
 

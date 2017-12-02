@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Media;
 using AutoClicker.Common.Model;
 using AutoClicker.Properties;
 using AutoClicker.ViewModel;
@@ -14,6 +15,7 @@ namespace AutoClicker
         {
             InitializeComponent();
 
+            ViewModel.Scale = VisualTreeHelper.GetDpi(this);
             ViewModel.MinimizeAction = Hide;
             ViewModel.SequenceFinishedAction = () =>
             {

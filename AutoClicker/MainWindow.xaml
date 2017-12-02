@@ -161,6 +161,6 @@
         <Button Grid.Row="6" Grid.Column="1" HorizontalAlignment="Right" Content="{Binding RunButtonText}" Padding="6"
                 Margin="6"
                 Command="{Binding RunCommand}"
-                IsEnabled="{Binding IsCancelling, Converter={StaticResource BoolInverter}}" />
+                IsEnabled="{Binding IsCanceling, Converter={StaticResource BoolInverter}}" />
     </Grid>
 </Window>
